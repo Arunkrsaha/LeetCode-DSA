@@ -1,52 +1,29 @@
 class Solution {
-void bfs(int row, int col, vector<vector<char>> grid, vector<vector<int>> &vis,int n,int m)
-    {
-        vis[row][col]=1;
-        queue<pair<int,int>> q;
-        q.push({row,col});
-        while(!q.empty())
-        {
-            int row=q.front().first;
-            int col=q.front().second;
-            q.pop();
-            // Traversing int the neighbours and mark them if it is land
-            for(int delrow=-1;delrow<=1;delrow++)
-            {
-                for(int delcol=-1;delcol<=1;delcol++)
-                {
-                    if(abs(delrow)==abs(delcol))
-                    {
-                        continue;
-                    }
-                    int nrow=row+delrow;
-                    int ncol=col+delcol;
-                    if(nrow>=0 && nrow<n && ncol>=0 && ncol<m && 
-                    grid[nrow][ncol]=='1' && !vis[nrow][ncol])
-                    {
-                        q.push({nrow,ncol});
-                        vis[nrow][ncol]=1;
-                    }
-                }
-            }
-        }
-    }
+private:
+  void dfs(vector<vector<char>>& grid, int i, int j) {
+    if (i < 0 || i == grid.size() || j < 0 || j == grid[0].size())
+      return;
+    if (grid[i][j] != '1')
+      return;
+
+    grid[i][j] = '2';  // Mark '2' as visited
+    dfs(grid, i + 1, j);
+    dfs(grid, i - 1, j);
+    dfs(grid, i, j + 1);
+    dfs(grid, i, j - 1);
+  }
 public:
     int numIslands(vector<vector<char>>& grid) {
-        int n=grid.size();
-        int m=grid[0].size();
-        vector<vector<int>> vis(n,vector<int> (m,0));
-        int cnt=0;
-        for(int row=0;row<n;row++)
-        {
-            for(int col=0;col<m;col++)
-            {
-                if(!vis[row][col] && grid[row][col]=='1')
-                {
-                    cnt++;
-                    bfs(row,col,grid,vis,n,m);
-                }
+        int ans = 0;
+
+        for (int i = 0; i < grid.size(); ++i){
+          for (int j = 0; j < grid[0].size(); ++j){
+            if (grid[i][j] == '1') {
+              dfs(grid, i, j);
+              ++ans;
             }
+          }
         }
-        return cnt;
+        return ans;
     }
 };
