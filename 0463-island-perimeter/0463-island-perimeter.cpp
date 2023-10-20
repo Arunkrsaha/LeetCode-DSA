@@ -1,44 +1,24 @@
 class Solution {
 public:
     int islandPerimeter(vector<vector<int>>& grid) {
-        int answer = 0;
-        int x = grid.size(), y = grid[0].size();
-        for(int i = 0; i < x ; i++)
+        int res = 0;
+        int r = grid.size();
+        int c = grid[0].size();
+        
+        for(int i=0; i<r; i++)
         {
-            for(int j = 0; j < y; j++)
+            for(int j=0; j<c; j++)
             {
                 if(grid[i][j] == 1)
                 {
-                    answer += 4;
-                    // Upper
-                    if(i - 1 >= 0)
-                    {
-                        if(grid[i-1][j] == 1)
-                            answer -= 1;
-                    }
-                    // Lower
-                    if(i + 1 < x)
-                    {
-                        if(grid[i+1][j] == 1)
-                            answer -= 1;
-                    }
-                    // Left
-                    if(j - 1 >= 0)
-                    {
-                        if(grid[i][j-1] == 1)
-                            answer -= 1;
-                    }
-                    // Right
-                    if(j + 1 < y)
-                    {
-                        if(grid[i][j+1] == 1)
-                            answer -= 1;
-                    }
+                    res += (i == 0 || grid[i-1][j] == 0 ? 1 : 0);
+                    res += (i == r-1 || grid[i+1][j] == 0 ? 1 : 0);
+                    res += (j == 0 || grid[i][j-1] == 0 ? 1 : 0);
+                    res += (j == c-1 || grid[i][j+1] == 0 ? 1 : 0);
                 }
-                
             }
         }
         
-        return answer;
+        return res;
     }
 };
