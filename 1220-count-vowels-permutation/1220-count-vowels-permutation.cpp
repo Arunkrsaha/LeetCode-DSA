@@ -1,53 +1,18 @@
 class Solution {
-    unordered_map<char, vector<int>> mp;
-    int mod = 1e9 + 7;
-
 public:
-    
-     int helper(int n, int i, char prev, vector<vector<long long>> &t)
-    {
-        if (i > n)
-            return 0;
-
-        if (i == n)
-        {
-            switch (prev)
-            {
-            case 'a':
-                return 1;
-            case 'e':
-                return 2;
-            case 'i':
-                return 4;
-            case 'o':
-                return 2;
-            case 'u':
-                return 1;
-            default:
-                return 5;
-            }
-        }
-
-        int idx = prev - 'a';
-        if (t[i][idx] != -1)
-            return t[i][idx];
-
-        long long ans = 0;
-        for (auto next : mp[prev])
-            ans += (helper(n, i + 1, next, t) % mod);
-
-        return t[i][idx] = ans % mod;
-    }
-
     int countVowelPermutation(int n) {
-        mp['c'] = {'a', 'e', 'i', 'o', 'u'};
-        mp['a'] = {'e'};
-        mp['e'] = {'a', 'i'};
-        mp['i'] = {'a', 'e', 'o', 'u'};
-        mp['o'] = {'i', 'u'};
-        mp['u'] = {'a'};
-
-        vector<vector<long long>> t(n + 2, vector<long long>(27, -1));
-        return helper(n, 1, 'c', t);
+        vector<vector<long long>> f(n, vector<long long>(5));
+        const int M = 1e9 + 7;
+        
+        for (int i=0; i<5; ++i) f[0][i] = 1;
+        for (int i=0; i+1<n; ++i) {
+            f[i+1][0] = (f[i][1] + f[i][2] + f[i][4]) % M;
+            f[i+1][1] = (f[i][0] + f[i][2]) % M;
+            f[i+1][2] = (f[i][1] + f[i][3]) % M;
+            f[i+1][3] = f[i][2];
+            f[i+1][4] = (f[i][2] + f[i][3]) % M;
+        }
+        
+        return accumulate(f.back().begin(), f.back().end(), 0ll) % M;
     }
 };
