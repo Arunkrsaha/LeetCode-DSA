@@ -1,18 +1,33 @@
 class Solution {
 public:
+    int M = 1e9+7;
+    int a = 0, e = 1, i = 2, o = 3, u = 4;
+    
     int countVowelPermutation(int n) {
-        vector<vector<long long>> f(n, vector<long long>(5));
-        const int M = 1e9 + 7;
-        
-        for (int i=0; i<5; ++i) f[0][i] = 1;
-        for (int i=0; i+1<n; ++i) {
-            f[i+1][0] = (f[i][1] + f[i][2] + f[i][4]) % M;
-            f[i+1][1] = (f[i][0] + f[i][2]) % M;
-            f[i+1][2] = (f[i][1] + f[i][3]) % M;
-            f[i+1][3] = f[i][2];
-            f[i+1][4] = (f[i][2] + f[i][3]) % M;
+        long long t[5][n+1];
+        //t[i][j] = number of strings ending at i vowel habing length j
+
+        for(int vowel = 0; vowel <= 4; vowel++) {
+            t[vowel][1] = 1;
         }
-        
-        return accumulate(f.back().begin(), f.back().end(), 0ll) % M;
+
+        for(int len = 2; len <= n; len++) {
+            t[a][len] = (t[e][len-1] + t[i][len-1] + t[u][len-1]) % M;
+
+            t[e][len] = (t[a][len-1] + t[i][len-1]) % M;
+
+            t[i][len] = (t[e][len-1] + t[o][len-1]) % M;
+
+            t[o][len] = (t[i][len-1]) % M;
+
+            t[u][len] = (t[i][len-1] + t[o][len-1]) % M;
+        }
+
+        //t[a][n] + t[e][n] + t[i][n]....
+        long long result = 0;
+        for(int vowel = 0; vowel <= 4; vowel++) {
+            result = (result + t[vowel][n]) % M;
+        }
+        return result;
     }
 };
