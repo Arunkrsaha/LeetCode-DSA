@@ -1,42 +1,42 @@
 class Graph {
-private:
-    vector<vector<pair<int, int>>> graph;
 public:
     Graph(int n, vector<vector<int>>& edges) {
-        graph.resize(n);
-        for (const vector<int>& edge : edges)
-           addEdge(edge);
+        this->n = n;
+        g = vector<vector<int>>(n, vector<int>(n, inf));
+        for (auto& e : edges) {
+            int f = e[0], t = e[1], c = e[2];
+            g[f][t] = c;
+        }
     }
-    
+
     void addEdge(vector<int> edge) {
-        const int u = edge[0];
-        const int v = edge[1];
-        const int w = edge[2];
-        graph[u].emplace_back(v, w);
+        int f = edge[0], t = edge[1], c = edge[2];
+        g[f][t] = c;
     }
-    
+
     int shortestPath(int node1, int node2) {
-        vector<int> dist(graph.size(), INT_MAX);
-        using P = pair<int, int>;  // (d, u)
-        priority_queue<P, vector<P>, greater<>> minHeap;
-
+        vector<bool> vis(n);
+        vector<int> dist(n, inf);
         dist[node1] = 0;
-        minHeap.emplace(dist[node1], node1);
-
-        while (!minHeap.empty()) {
-          const auto [d, u] = minHeap.top();
-          minHeap.pop();
-          if (u == node2)
-            return d;
-          for (const auto& [v, w] : graph[u])
-            if (d + w < dist[v]) {
-              dist[v] = d + w;
-              minHeap.emplace(dist[v], v);
+        for (int i = 0; i < n; ++i) {
+            int t = -1;
+            for (int j = 0; j < n; ++j) {
+                if (!vis[j] && (t == -1 || dist[t] > dist[j])) {
+                    t = j;
+                }
+            }
+            vis[t] = true;
+            for (int j = 0; j < n; ++j) {
+                dist[j] = min(dist[j], dist[t] + g[t][j]);
             }
         }
-
-        return -1;    
+        return dist[node2] >= inf ? -1 : dist[node2];
     }
+
+private:
+    vector<vector<int>> g;
+    int n;
+    const int inf = 1 << 29;
 };
 
 /**
