@@ -1,25 +1,20 @@
 class Solution {
-private:
-  bool isVowel(char c) {
-    static constexpr string_view kVowels = "aeiouAEIOU";
-    return kVowels.find(c) != string_view::npos;
-  }
-    
 public:
     string sortVowels(string s) {
-        string ans;
-        vector<char> vowels;
-
-        for (const char c : s)
-          if (isVowel(c))
-            vowels.push_back(c);
-
-        ranges::sort(vowels);
-
-        int i = 0;  // vowels' index
-        for (const char c : s)
-          ans += isVowel(c) ? vowels[i++] : c;
-
-        return ans;
+        string vs;
+        for (auto c : s) {
+            char d = tolower(c);
+            if (d == 'a' || d == 'e' || d == 'i' || d == 'o' || d == 'u') {
+                vs.push_back(c);
+            }
+        }
+        sort(vs.begin(), vs.end());
+        for (int i = 0, j = 0; i < s.size(); ++i) {
+            char d = tolower(s[i]);
+            if (d == 'a' || d == 'e' || d == 'i' || d == 'o' || d == 'u') {
+                s[i] = vs[j++];
+            }
+        }
+        return s;
     }
 };
