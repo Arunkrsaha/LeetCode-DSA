@@ -1,25 +1,26 @@
 class Solution {
 public:
     vector<int> findDiagonalOrder(vector<vector<int>>& nums) {
-        unordered_map<int, vector<int>> bucket;
-        int maxKey = INT_MIN;
-        int count = 0;
+        int m = nums.size();
+        if(m == 0) return vector<int>();
+        vector<vector<int>> tuples;
         
-        for(int i = 0; i < nums.size(); i++){
+        for(int i = 0; i < m; i++){
             for(int j = 0; j < nums[i].size(); j++){
-                bucket[i+j].push_back(nums[i][j]);
-                maxKey = max(maxKey, i+j);
-                count++;
+                /*
+                first sort by row index + col index, ascending,  
+                and then by row index, descending
+                */
+                tuples.push_back({i+j, -i, nums[i][j]});
             }
         }
         
-        vector<int> ans(count);
-        int idx = 0;
+        sort(tuples.begin(), tuples.end());
         
-        for(int i = 0; i <= maxKey; i++){
-            for(int j = bucket[i].size()-1; j >= 0; j--){
-                ans[idx++] = bucket[i][j];
-            }
+        vector<int> ans(tuples.size());
+        
+        for(int i = 0; i < ans.size(); i++){
+            ans[i] = tuples[i][2];
         }
         
         return ans;
