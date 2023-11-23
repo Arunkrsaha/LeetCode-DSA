@@ -2,15 +2,32 @@ class Solution {
 public:
     bool check(vector<int> &arr)
     {
-        sort(begin(arr), end(arr));
         int n= arr.size();
-        int d= arr[1]-arr[0];
-        for(int i=2;i<n;i++)
+        int minE = INT_MAX;
+        int maxE = INT_MIN;
+        
+        unordered_set<int> st;
+        
+        for(int &num : arr)
         {
-            if(arr[i]-arr[i-1] != d)
+            minE=min(minE,num);
+            maxE=max(maxE,num);
+            st.insert(num);
+        }
+        
+        if((maxE-minE) % (n-1) != 0)
+        {
+            return false;
+        }
+        int d = (maxE-minE) / (n-1);
+        int curr = minE+d;
+        while(curr<maxE)
+        {
+            if(st.find(curr) == st.end())
             {
-             return false;
+                return false;
             }
+            curr += d;
         }
         return true;
     }
