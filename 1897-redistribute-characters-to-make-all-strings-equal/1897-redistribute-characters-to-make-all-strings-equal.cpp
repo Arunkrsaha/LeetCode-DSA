@@ -2,19 +2,18 @@ class Solution {
 public:
     bool makeEqual(vector<string>& words) {
         int n= words.size();
-        unordered_map<char, int> mp;
-        for(int i=0;i<n;i++)
+        int count[26] = {0};
+        for(string &word: words)
         {
-            string temp= words[i];
-            for(int j=0;j<temp.length();j++)
+            for(char &ch: word)
             {
-                mp[temp[j]]++;
+                count[ch-'a']++;
             }
         }
         
-        for(auto it:mp)
+        for(auto freq:count)
         {
-            if(it.second%n!=0)
+            if(freq%n!=0)
             {
                 return false;
             }
