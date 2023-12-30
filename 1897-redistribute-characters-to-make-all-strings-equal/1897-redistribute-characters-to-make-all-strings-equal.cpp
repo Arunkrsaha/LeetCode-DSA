@@ -11,13 +11,10 @@ public:
             }
         }
         
-        for(auto freq:count)
-        {
-            if(freq%n!=0)
-            {
-                return false;
-            }
-        }
-        return true;
+        auto lambda = [&] (int freq){
+            return freq%n==0;
+        };
+        
+        return all_of(begin(count), end(count), lambda);
     }
 };
