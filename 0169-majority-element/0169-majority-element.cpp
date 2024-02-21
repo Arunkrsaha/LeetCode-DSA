@@ -7,12 +7,13 @@ public:
         {
             mp[nums[i]]++;
         }
-        int ans=0;
-        for(auto it:mp)
+        int ans;
+        for(auto it: mp)
         {
             if(it.second>(n/2))
             {
-                ans=it.first;
+                ans= it.first;
+                break;
             }
         }
         return ans;
